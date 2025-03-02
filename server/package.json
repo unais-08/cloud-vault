@@ -1,0 +1,40 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "cloud-vault backend written in node-express with mongodb as DB",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unais-08/cloud-vault.git"
+  },
+  "keywords": [
+    "cloud-vault",
+    "express",
+    "node",
+    "monogdb",
+    "G-Drive"
+  ],
+  "author": "Shaikh Unais , Patil Aashutosh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/unais-08/cloud-vault/issues"
+  },
+  "homepage": "https://github.com/unais-08/cloud-vault#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.11.0",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
