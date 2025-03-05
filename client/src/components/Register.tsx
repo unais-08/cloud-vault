@@ -1,24 +1,33 @@
 import { FormEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
+import { registerUser } from "../store/features/authSlice";
+import { useNavigate } from "react-router-dom";
 import Spinner from "./Spinner";
-import { registerUser } from "../apis/auth_api";
 
 const RegisterForm = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { loading, error } = useSelector((state: RootState) => state.auth);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!name || !password || !email) {
-      console.log("Please fill in all fields");
+      alert("Please fill in all fields");
       return;
     }
-    await registerUser(name, email, password);
-    setEmail("");
-    setName("");
-    setPassword("");
+
+    const result = await dispatch(registerUser({ name, email, password }));
+
+    if (registerUser.fulfilled.match(result)) {
+      navigate("/");
+    }
   };
 
   return (
@@ -30,12 +39,13 @@ const RegisterForm = () => {
         <h5 className="text-center text-lg font-normal capitalize tracking-wide mb-6">
           Register
         </h5>
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
         <div className="mb-4">
           <label
             htmlFor="name"
             className="block text-sm mb-2 capitalize tracking-wide"
           >
-            name
+            Name
           </label>
           <input
             type="text"
@@ -50,7 +60,7 @@ const RegisterForm = () => {
             htmlFor="email"
             className="block text-sm mb-2 capitalize tracking-wide"
           >
-            email
+            Email
           </label>
           <input
             type="email"
@@ -62,10 +72,10 @@ const RegisterForm = () => {
         </div>
         <div className="mb-4">
           <label
-            htmlFor="email"
+            htmlFor="password"
             className="block text-sm mb-2 capitalize tracking-wide"
           >
-            password
+            Password
           </label>
           <input
             type="password"
@@ -78,9 +88,9 @@ const RegisterForm = () => {
         <button
           type="submit"
           className="w-full bg-[#645cff] text-white rounded-md p-2.5 text-sm capitalize tracking-wide shadow-sm transition duration-300 hover:bg-[#3c3799] hover:shadow-md flex justify-center items-center"
-          disabled={isLoading}
+          disabled={loading}
         >
-          {isLoading ? <Spinner /> : "Register"}
+          {loading ? <Spinner /> : "Register"}
         </button>
       </form>
     </section>

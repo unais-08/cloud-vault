@@ -1,29 +1,26 @@
 import { FormEvent, useState } from "react";
 import Spinner from "./Spinner";
-import { loginUser } from "../apis/auth_api";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, selectAuth } from "../store/features/authSlice";
 import { useNavigate } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { AppDispatch } from "../store/store";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth(); // Use login function from context
+
+  const { loading, error } = useSelector(selectAuth);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-    if (!password || !email) {
-      setIsLoading(false);
-      console.error("All fields are required");
+    const result = await dispatch(loginUser({ email, password }));
+
+    if (loginUser.fulfilled.match(result)) {
+      navigate("/");
     }
-    const data = await loginUser(email, password);
-    if (data) {
-      login(data.token); // Update auth state
-      navigate("/dashboard");
-    }
-    setIsLoading(false);
   };
 
   return (
@@ -35,12 +32,13 @@ const LoginForm = () => {
         <h5 className="text-center text-lg font-normal capitalize tracking-wide mb-6">
           Login
         </h5>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <div className="mb-4">
           <label
             htmlFor="email"
             className="block text-sm mb-2 capitalize tracking-wide"
           >
-            email
+            Email
           </label>
           <input
             type="email"
@@ -55,7 +53,7 @@ const LoginForm = () => {
             htmlFor="password"
             className="block text-sm mb-2 capitalize tracking-wide"
           >
-            password
+            Password
           </label>
           <input
             type="password"
@@ -68,9 +66,9 @@ const LoginForm = () => {
         <button
           type="submit"
           className="w-full bg-[#645cff] text-white rounded-md p-2.5 text-sm capitalize tracking-wide shadow-sm transition duration-300 hover:bg-[#3c3799] hover:shadow-md flex justify-center items-center"
-          disabled={isLoading}
+          disabled={loading}
         >
-          {isLoading ? <Spinner /> : "Login"}
+          {loading ? <Spinner /> : "Login"}
         </button>
       </form>
     </section>
