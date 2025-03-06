@@ -1,31 +1,24 @@
 import { FormEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store/store";
-import { registerUser } from "../store/features/authSlice";
-import { useNavigate } from "react-router-dom";
-import Spinner from "./Spinner";
+import { loginUser, selectAuth } from "../../redux/features/authSlice";
+import { useNavigate } from "react-router";
+import { AppDispatch } from "../../redux/store";
+import Spinner from "../Spinner";
 
-const RegisterForm = () => {
-  const dispatch = useDispatch<AppDispatch>();
+const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loading, error } = useSelector((state: RootState) => state.auth);
+  const { loading, error } = useSelector(selectAuth);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const result = await dispatch(loginUser({ email, password }));
 
-    if (!name || !password || !email) {
-      alert("Please fill in all fields");
-      return;
-    }
-
-    const result = await dispatch(registerUser({ name, email, password }));
-
-    if (registerUser.fulfilled.match(result)) {
+    if (loginUser.fulfilled.match(result)) {
       navigate("/");
     }
   };
@@ -37,24 +30,9 @@ const RegisterForm = () => {
         onSubmit={handleSubmit}
       >
         <h5 className="text-center text-lg font-normal capitalize tracking-wide mb-6">
-          Register
+          Login
         </h5>
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="block text-sm mb-2 capitalize tracking-wide"
-          >
-            Name
-          </label>
-          <input
-            type="text"
-            className="w-full p-2.5 rounded-md bg-[#f8fafc] border border-[#e2e8f0] text-gray-900 placeholder-gray-400"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <div className="mb-4">
           <label
             htmlFor="email"
@@ -90,11 +68,11 @@ const RegisterForm = () => {
           className="w-full bg-[#645cff] text-white rounded-md p-2.5 text-sm capitalize tracking-wide shadow-sm transition duration-300 hover:bg-[#3c3799] hover:shadow-md flex justify-center items-center"
           disabled={loading}
         >
-          {loading ? <Spinner /> : "Register"}
+          {loading ? <Spinner /> : "Login"}
         </button>
       </form>
     </section>
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

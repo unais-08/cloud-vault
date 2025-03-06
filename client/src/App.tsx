@@ -1,14 +1,14 @@
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import ErrorPage from "./pages/ErrorPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import GuestRoute from "./routes/GuestRoute";
-import Layout from "./routes/Layout";
+import RegisterPage from "./pages/auth/RegisterPage";
+import LoginPage from "./pages/auth/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+import ProtectedRoute from "./pages/Layouts/ProtectedRoute";
+import ErrorPage from "./pages/ErrorPage";
+import GuestRoute from "./pages/Layouts/GuestRoute";
+import Layout from "./pages/Layouts/Layout";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "./store/store";
-import { checkAuth } from "./store/features/authSlice";
+import { AppDispatch } from "./redux/store";
+import { checkAuth } from "./redux/features/authSlice";
 import { useEffect } from "react";
 
 const router = createBrowserRouter([

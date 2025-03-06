@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { RootState } from "../../redux/store";
 
 const GuestRoute = () => {
   const { isAuthenticated, loading } = useSelector(

@@ -1,7 +1,7 @@
-import { useSelector, useDispatch } from "react-redux";
-import type { RootState, AppDispatch } from "../store/store";
-import { logoutUser } from "../store/features/authSlice";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState, AppDispatch } from "../redux/store";
+import { logoutUser } from "../redux/features/authSlice";
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
